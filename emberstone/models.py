@@ -6,20 +6,20 @@ Database models for the Emberstone project.
 from flask import redirect, url_for
 from flask_login import UserMixin
 from sqlalchemy.sql import func
-from emberstone import db, login_manager
+from . import db, login_manager
 
 
-# User loader
+# LoginManager - User Loader
 @login_manager.user_loader
 def load_user(user_id):
-    '''Load user from database'''
-    return User.query.get(int(user_id))
+    '''Queries the database for the user_id and returns the user object'''
+    return User.query.get(user_id)
 
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    '''Redirect unauthorized users to login page'''
-    return redirect(url_for('auth.login'))
+    '''Redirects unauthorized users to the login page'''
+    return redirect(url_for('users.login'))
 
 
 # Fire department model
@@ -36,9 +36,9 @@ class FireDepartment(db.Model):
     street_suffix = db.Column(db.String(10))
     city = db.Column(db.String(50))
     state = db.Column(db.String(2))
-    zipcode = db.Column(db.Integer(9))
-    phone = db.Column(db.Integer(10))
-    fax = db.Column(db.Integer(10))
+    zipcode = db.Column(db.Integer)
+    phone = db.Column(db.Integer)
+    fax = db.Column(db.Integer)
     email = db.Column(db.String(100))
     county_code = db.Column(db.String(3))
     status = db.Column(db.String(10), nullable=False, default='Active')
@@ -70,9 +70,9 @@ class FireStation(db.Model):
     street_suffix = db.Column(db.String(10))
     city = db.Column(db.String(50))
     state = db.Column(db.String(2))
-    zipcode = db.Column(db.Integer(9))
-    phone = db.Column(db.Integer(10))
-    fax = db.Column(db.Integer(10))
+    zipcode = db.Column(db.Integer)
+    phone = db.Column(db.Integer)
+    fax = db.Column(db.Integer)
     email = db.Column(db.String(100))
     county_code = db.Column(db.String(3))
     status = db.Column(db.String(10), nullable=False, default='Active')
@@ -108,9 +108,9 @@ class User(db.Model, UserMixin):
     street_suffix = db.Column(db.String(10))
     city = db.Column(db.String(50))
     state = db.Column(db.String(2))
-    zipcode = db.Column(db.Integer(9))
-    phone = db.Column(db.Integer(10))
-    fax = db.Column(db.Integer(10))
+    zipcode = db.Column(db.Integer)
+    phone = db.Column(db.Integer)
+    fax = db.Column(db.Integer)
     county_code = db.Column(db.String(3))
     post_office_box = db.Column(db.String(10))
     apartment_number = db.Column(db.String(10))
