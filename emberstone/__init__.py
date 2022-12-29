@@ -21,7 +21,7 @@ EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-    os.path.join(basedir, 'data.sqlite')
+    os.path.join(basedir, 'database.db')
 app.config['SECRET_KEY'] = SECRET_KEY
 
 
@@ -43,3 +43,9 @@ app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = 'rodneygauna@gmail.com'
 app.config['MAIL_PASSWORD'] = EMAIL_PASSWORD
 mail.init_app(app)
+
+# Blueprint imports
+from emberstone.cli.commands import commands
+
+# Register blueprints
+app.register_blueprint(commands)
