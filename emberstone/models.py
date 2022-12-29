@@ -48,8 +48,7 @@ class FireDepartment(db.Model):
     updated_at = db.Column(db.DateTime(timezone=True))
     updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     # Relationships
-    users = db.relationship('User', backref='fire_department', lazy=True)
-    fire_station = db.relationship(
+    fire_stations = db.relationship(
         'FireStation', backref='fire_department', lazy=True)
 
     def __repr__(self):
@@ -61,6 +60,8 @@ class FireStation(db.Model):
     '''SQL Table: Fire Stations'''
     __tablename__ = 'fire_stations'
     id = db.Column(db.Integer, primary_key=True)
+    fire_department_id = db.Column(
+        db.Integer, db.ForeignKey('fire_departments.id'))
     name = db.Column(db.String(100), nullable=False)
     number = db.Column(db.String(10))
     street_number = db.Column(db.String(10))
@@ -81,10 +82,6 @@ class FireStation(db.Model):
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     updated_at = db.Column(db.DateTime(timezone=True))
     updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
-    # Relationships
-    fire_department = db.relationship(
-        'FireDepartment', backref='fire_stations', lazy=True)
-    users = db.relationship('User', backref='fire_station', lazy=True)
 
     def __repr__(self):
         return f"FireStation('{self.name}')"
@@ -95,6 +92,8 @@ class User(db.Model, UserMixin):
     '''SQL Table: Users'''
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
+    fire_department_id = db.Column(
+        db.Integer, db.ForeignKey('fire_departments.id'))
     firstname = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=False)
     middlename = db.Column(db.String(50))
@@ -123,9 +122,6 @@ class User(db.Model, UserMixin):
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     updated_at = db.Column(db.DateTime(timezone=True))
     updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
-    # Relationships
-    fire_department = db.relationship(
-        'FireDepartment', backref='users', lazy=True)
 
     def __repr__(self):
         return f"User('{self.firstname} {self.lastname}')"
