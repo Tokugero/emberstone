@@ -27,6 +27,7 @@ class FireDepartment(db.Model):
     '''SQL Table: Fire Departments'''
     __tablename__ = 'fire_departments'
     id = db.Column(db.Integer, primary_key=True)
+    # Data
     nfirs_id = db.Column(db.String(5), unique=True)
     name = db.Column(db.String(100), nullable=False)
     street_number = db.Column(db.String(10))
@@ -42,14 +43,12 @@ class FireDepartment(db.Model):
     email = db.Column(db.String(100))
     county_code = db.Column(db.String(3))
     status = db.Column(db.String(10), nullable=False, default='Active')
+    # Timestamps
     created_at = db.Column(db.DateTime(timezone=True),
                            nullable=False, default=func.now())
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     updated_at = db.Column(db.DateTime(timezone=True))
     updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
-    # Relationships
-    fire_stations = db.relationship(
-        'FireStation', backref='fire_department', lazy=True)
 
     def __repr__(self):
         return f"FireDepartment('{self.name}')"
@@ -60,8 +59,10 @@ class FireStation(db.Model):
     '''SQL Table: Fire Stations'''
     __tablename__ = 'fire_stations'
     id = db.Column(db.Integer, primary_key=True)
+    # FireDepartment Foreign Key
     fire_department_id = db.Column(
         db.Integer, db.ForeignKey('fire_departments.id'))
+    # Data
     name = db.Column(db.String(100), nullable=False)
     number = db.Column(db.String(10))
     street_number = db.Column(db.String(10))
@@ -77,11 +78,15 @@ class FireStation(db.Model):
     email = db.Column(db.String(100))
     county_code = db.Column(db.String(3))
     status = db.Column(db.String(10), nullable=False, default='Active')
+    # Timestamps
     created_at = db.Column(db.DateTime(timezone=True),
                            nullable=False, default=func.now())
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     updated_at = db.Column(db.DateTime(timezone=True))
     updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    # Relationships
+    fire_department = db.relationship(
+        'FireDepartment', backref=db.backref('fire_stations', lazy=True))
 
     def __repr__(self):
         return f"FireStation('{self.name}')"
@@ -92,8 +97,10 @@ class User(db.Model, UserMixin):
     '''SQL Table: Users'''
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
+    # FireDepartment Foreign Key
     fire_department_id = db.Column(
         db.Integer, db.ForeignKey('fire_departments.id'))
+    # Data
     firstname = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=False)
     middlename = db.Column(db.String(50))
@@ -117,11 +124,15 @@ class User(db.Model, UserMixin):
     rank = db.Column(db.String(10))
     password = db.Column(db.String(60), nullable=False)
     status = db.Column(db.String(10), nullable=False, default='Active')
+    # Timestamps
     created_at = db.Column(db.DateTime(timezone=True),
                            nullable=False, default=func.now())
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     updated_at = db.Column(db.DateTime(timezone=True))
     updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    # Relationships
+    fire_department = db.relationship('FireDepartment', backref=db.backref(
+        'users', lazy='dynamic'), foreign_keys=[fire_department_id])
 
     def __repr__(self):
         return f"User('{self.firstname} {self.lastname}')"
