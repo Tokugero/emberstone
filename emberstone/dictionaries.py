@@ -1,5 +1,7 @@
 '''
 List of all dictionaries used in the application.
+NFIRS Data dictionary can be found here:
+https://www.usfa.fema.gov/downloads/xls/NFIRS_Spec_Tables_2013.xls
 '''
 
 

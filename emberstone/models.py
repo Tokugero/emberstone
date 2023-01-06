@@ -1,5 +1,7 @@
 '''
 Database models for the Emberstone project.
+NFIRS Design Documents can be found here:
+https://www.usfa.fema.gov/nfirs/documentation/
 '''
 
 # Imports
